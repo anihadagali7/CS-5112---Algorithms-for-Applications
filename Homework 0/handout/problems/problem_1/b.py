@@ -6,8 +6,8 @@ def find_index(numbers, value):
     method for this problem.
     """
     
-    for (index, value) in enumerate(numbers):
-        if(value == value):
+    for (index, v) in enumerate(numbers):
+        if(v == value):
             return index
     
     return -1

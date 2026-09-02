@@ -5,8 +5,8 @@ def even_values_keys(data):
     
     answer = []
     
-    for key in data:
-        if(key % 2 == 0):
+    for key, value in data.items():
+        if(value % 2 == 0):
             answer.append(key)
             
     return answer
@@ -48,4 +48,17 @@ def convert_to_celsius(fahrenheit_temps):
     Append " Freezing" when the original Fahrenheit temperature is at or below
     32.
     """
-    pass
+    
+    answer = []
+    
+    for temp in fahrenheit_temps:
+        formula = round((temp - 32) / 1.8, 1)
+        
+        if(temp <= 32):
+            celcius = f"{formula}°C Freezing"
+            answer.append(celcius)
+        else:
+            celcius = f"{formula}°C"
+            answer.append(celcius)
+            
+    return answer

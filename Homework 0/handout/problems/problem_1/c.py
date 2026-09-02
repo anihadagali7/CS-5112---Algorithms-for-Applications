@@ -10,6 +10,8 @@ def process_numbers(numbers):
         if(num == 0):
             continue
         elif(num > 0):
-            print(num)        
+            print(num)
+        else:
+            break
     
     pass
