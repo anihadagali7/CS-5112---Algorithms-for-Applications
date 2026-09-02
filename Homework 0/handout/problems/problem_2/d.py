@@ -4,6 +4,6 @@ def pop_element_at(lst, index):
     """
     
     if(index < 0 or index >= len(lst)):
-        return 'None'
+        return None
     else:
         return lst.pop(index)

@@ -28,9 +28,7 @@ def get_items(data):
     Return a list of all key-value pairs in data.
     """
     
-    list(data.items())
-    
-    pass
+    return list(data.items())
 
 
 def get_value(data, key, default=None):
