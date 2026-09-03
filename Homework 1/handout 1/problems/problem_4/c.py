@@ -1,0 +1,16 @@
+"""
+Problem 4c
+
+input:
+    values -- list of integers.
+    d_mode -- most frequent delta.
+output: integer containing the frequency of d_mode.
+
+TODO: implement your solution in Theta(n).
+"""
+
+from collections import Counter
+
+
+def most_frequent_difference_c(values, d_mode) -> int:
+    pass
