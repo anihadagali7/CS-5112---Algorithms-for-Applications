@@ -23,24 +23,29 @@ def cookies_distrubution_map(apartments) -> list:
     
     result = []
     
-    for current_apt in visited_apts:
-        # TODO need to make every apt check each new apt, currently it jumps to next one
+    while ((len(visited_apts) - 1) < len(apartments)):
         min_distance = math.inf
         min_distance_apt = None
-        for next_stop in apartments:
-            if(current_apt is not next_stop and next_stop not in visited_apts):
-                
-                cal_d = calculate_distance(current_apt, next_stop)
-                
-                if(cal_d < min_distance):
-                    min_distance = cal_d 
-                    
-                    min_distance_apt = next_stop
+        min_distance_start = None
         
+        for current_apt in visited_apts:
+            # TODO need to make every apt check each new apt, currently it jumps to next one
+            
+            for next_stop in apartments:
+                if(current_apt is not next_stop and next_stop not in visited_apts):
+                    
+                    cal_d = calculate_distance(current_apt, next_stop)
+                    
+                    if(cal_d < min_distance):
+                        min_distance = cal_d 
+                        
+                        min_distance_apt = next_stop
+                        min_distance_start = current_apt
+            
         if(min_distance_apt is not None):
             visited_apts.append(min_distance_apt)
         
-            result.append((current_apt, min_distance_apt))
+            result.append((min_distance_start, min_distance_apt))
     
     return result
 
