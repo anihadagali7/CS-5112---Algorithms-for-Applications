@@ -60,6 +60,3 @@ def stable_matching(file) -> dict:
                 free_hospitals.append(current_hospital)
 
     return doctor_to_hospital
-
-
-print("c.py: ", stable_matching())
