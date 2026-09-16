@@ -43,8 +43,6 @@ def huffman_compress(all_rle_symbols):
     
     
     for item, count in frequency_counts.items():
-        print("frequency counts: ", item, count)    
-        
         heapq.heappush(heap, Node(item, count))
         
     while len(heap) > 1:
@@ -65,14 +63,13 @@ def huffman_compress(all_rle_symbols):
 
 def create_huffman_tree(node, code, codes):
     if node is None:
-        return
-    
+        return codes
+
     if node.left is None and node.right is None:
-        codes[node.symbol] = code
-        
+        codes[node.symbol] = code if code else "0"
+        return codes
+
     create_huffman_tree(node.left, code + "0", codes)
     create_huffman_tree(node.right, code + "1", codes)
-    
-    return codes
 
-print("huffman codes: ", huffman_compress([(0, 52), (0, -7), (2, 3), (1, -2), ('EOB',)]))
+    return codes

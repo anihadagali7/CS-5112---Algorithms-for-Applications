@@ -29,6 +29,3 @@ def run_length_encode(data_block):
     answer.append(("EOB",))
             
     return answer
-
-# print("running the problem : ", run_length_encode([52, -7, 0, 0, 3, 0, -2, 0]))
-print("running the problem : ", run_length_encode([0, 0, 0, 0]))
