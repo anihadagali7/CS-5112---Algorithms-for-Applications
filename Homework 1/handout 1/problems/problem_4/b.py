@@ -38,6 +38,3 @@ def most_frequent_difference_b(values, d_mode) -> int:
         counter = counter + frequency
         
     return counter
-
-# print("the answer is: ", most_frequent_difference_b([10, 9, 8, 3, 4, 5, 9, 11, 4, 6, 12], 6))
-print("the answer is: ", most_frequent_difference_b([5, 5, 5], 0))

@@ -26,5 +26,3 @@ def most_frequent_difference_a(values, d_mode) -> int:
                     counter = counter + 1
                     
     return counter
-
-# print("the answer is: ", most_frequent_difference_a([10, 9, 8, 3, 4, 5, 9, 11, 4, 6, 12], 6))

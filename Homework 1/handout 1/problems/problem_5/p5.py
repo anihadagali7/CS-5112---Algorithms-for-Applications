@@ -58,27 +58,3 @@ def calculate_distance(aptA, aptB):
     i,j = aptB
     
     return abs(a-i) + abs(b-j)
-
-# print("result: ", cookies_distrubution_map([(2,3), (2,4), (5,5)]))
-# print("result: ", cookies_distrubution_map([(1,2), (3,2), (2,4), (2,6)]))
-# print("result: ", cookies_distrubution_map([(1,1), (1,5), (1,6), (5,6)]))
-# print("result: ", cookies_distrubution_map([(1,2), (2,1)]))
-# print("result: ", cookies_distrubution_map([(1,1), (1,2), (1,3), (1,4)]))
-# print("result: ", cookies_distrubution_map([(1,1), (1,5), (1,6), (5,6)]))
-# print("result: ", cookies_distrubution_map([(1,3), (3,1), (3,5), (5,3)]))
-# print("result: ", cookies_distrubution_map([(1,1), (1,10), (10,1), (10,10)]))
-# print("result: ", cookies_distrubution_map([
-#     (1,1),
-#     (1,5),
-#     (3,7),
-#     (6,6),
-#     (7,2)
-# ]))
-# print("result: ", cookies_distrubution_map([
-#     (1,2),
-#     (2,8),
-#     (4,4),
-#     (5,1),
-#     (6,7),
-#     (8,3)
-# ]))

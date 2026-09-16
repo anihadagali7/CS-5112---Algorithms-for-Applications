@@ -5,19 +5,12 @@ output: Dictionary mapping students to hospitals.
 TODO: Implement the Gale-Shapley algorithm to run in O(n^2).
 """
 
-
-def stable_matching() -> dict:
+def stable_matching(file) -> dict:
     n = 0
     doctors_pref = []
     hospitals_pref = []
         
-    import os
-
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    # input_path = os.path.join(base_dir, "input", "test_public_n2.txt")
-    input_path = os.path.join(base_dir, "a_test.txt")
-
-    with open(input_path, "r") as f:
+    with open(file, "r") as f:
         n = int(f.readline())
         for _ in range(n):
             d_pref = f.readline().split()
