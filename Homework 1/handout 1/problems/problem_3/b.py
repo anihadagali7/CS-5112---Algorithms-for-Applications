@@ -36,4 +36,40 @@ def huffman_compress(all_rle_symbols):
     # 4. Encode `all_rle_symbols` into a single bitstring using your codes.
     huffman_codes = {}
     encoded_data = ""
+    
+    frequency_counts = collections.Counter(all_rle_symbols)
+    
+    heap = []
+    
+    
+    for item, count in frequency_counts.items():
+        heapq.heappush(heap, Node(item, count))
+        
+    while len(heap) > 1:
+        left = heapq.heappop(heap)
+        right = heapq.heappop(heap)
+        
+        parent = Node(None, left.freq + right.freq, left, right)
+        
+        heapq.heappush(heap, parent)
+        
+    root = heap[0]
+    huffman_codes = create_huffman_tree(root, "", huffman_codes)
+    
+    for symbol in all_rle_symbols:
+        encoded_data += huffman_codes[symbol]
+        
     return huffman_codes, encoded_data
+
+def create_huffman_tree(node, code, codes):
+    if node is None:
+        return codes
+
+    if node.left is None and node.right is None:
+        codes[node.symbol] = code if code else "0"
+        return codes
+
+    create_huffman_tree(node.left, code + "0", codes)
+    create_huffman_tree(node.right, code + "1", codes)
+
+    return codes

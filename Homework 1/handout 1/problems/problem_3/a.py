@@ -16,4 +16,16 @@ def run_length_encode(data_block):
     # Hint: Iterate through the block. If you see a zero, increment a counter.
     # If you see a non-zero value, create a symbol with the current zero count
     # and the value, then reset the counter. Do not forget the EOB symbol.
-    return []
+    
+    counter = 0
+    answer = []
+    
+    for element in data_block:
+        if(element == 0):
+            counter += 1
+        else:
+            answer.append((counter, element))
+            counter = 0
+    answer.append(("EOB",))
+            
+    return answer
