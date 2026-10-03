@@ -19,55 +19,64 @@ def distance(point1, point2):
 def closest_pair(points):
     random.shuffle(points)
     
-    delta = distance(points[0], points[1])
+    min_distance = distance(points[0], points[1])
     
-    min_distance = delta
+    if min_distance == 0:
+        return [points[0], points[1]]
+    
     min_pair = [points[0], points[1]]
     
-    grid_map = build_grid(points, delta)
+    grid_map = build_grid(points[:2], min_distance)
     
-    for p in points[1:]:
-        cell = compute_cell(p, delta / 2)
+    for index, new_point in enumerate(points[2:], start=2):
+        cell = compute_cell(new_point, min_distance / 2)
         
-        # now we know where the new point belongs on grid
-        # we need to check surrounding squares
+        local_min = min_distance
+        local_pair = []
         
         a, b = cell
         
-        for x in range(a - 2, a + 2):
-            for y in range(b - 2, b + 2):
-                if(grid_map[(x, y)]):
+        for x in range(a - 2, a + 3):
+            for y in range(b - 2, b + 3):
+                if((x,y) in grid_map):
                     
-                    # list of points in that cell, or is it only one point ?
-                    list_p = grid_map[(x, y)]
+                    existing_point = grid_map[(x, y)]
                     
-                    for cell_p in list_p:
-                        current_distance = distance(p, cell_p)
+                    current_distance = distance(new_point, existing_point)
+                    
+                    if current_distance < local_min:
+                        # rebuild the map
+                        local_min = current_distance
+                        local_pair = [new_point, existing_point]
+        
+        if(local_min < min_distance):    
+            min_distance = local_min
+            
+            if min_distance == 0:
+                return local_pair
+            min_pair = local_pair
+            grid_map = build_grid(points[0:index + 1], min_distance)
+        else:
+            grid_map[cell] = new_point
                         
-                        if current_distance < delta:
-                            # rebuild the map
-                            delta = current_distance
-                            
-                            # i know this is wrong, but i need to figure out what this function takes in as params
-                            build_grid(points[:i], delta)
-                        else:
-                            # either append to list, or just set value, based on earlier question
-                            grid_map[cell] = grid_map[cell].append(p)
-                        
-    pass
+    return min_pair
     
-def build_grid(point1, point2, delta):
+def build_grid(points, delta):
     subsquare_len = delta / 2
     
     grid = {}
     
-    grid[compute_cell(point1, subsquare_len)] = point1
-    grid[compute_cell(point2, subsquare_len)] = point2
+    for p in points:
+        grid[compute_cell(p, subsquare_len)] = p
+    
+    return grid
     
 def compute_cell(point, subsquare_len):
-    x, y = point
+    x, y = (point)
     
     cell_x = math.floor(x / subsquare_len) 
     cell_y = math.floor(y / subsquare_len)
 
     return (cell_x, cell_y)
+
+print("answer is: ", closest_pair([(0, 0), (1, 1), (5, 5), (1, 2), (0, 5), (5, 0), (5, 5)]))
