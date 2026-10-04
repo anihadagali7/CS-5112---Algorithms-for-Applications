@@ -78,5 +78,3 @@ def compute_cell(point, subsquare_len):
     cell_y = math.floor(y / subsquare_len)
 
     return (cell_x, cell_y)
-
-print("answer is: ", closest_pair([(0, 0), (1, 1), (5, 5), (1, 2), (0, 5), (5, 0), (5, 5)]))

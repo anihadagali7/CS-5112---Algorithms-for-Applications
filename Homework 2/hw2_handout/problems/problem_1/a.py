@@ -32,6 +32,3 @@ def recursive_helper(list, n, memo):
     memo[n] = max(pick, notPick)
 
     return memo[n]
-
-
-print("max sum list: ", maxsum_list([3, 4, 5, 8, 9, 1, 2]))

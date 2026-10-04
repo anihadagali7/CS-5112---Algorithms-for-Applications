@@ -79,7 +79,4 @@ def closest_pair(points):
     points.sort(key=lambda item: item[0])
     
     obj = recursive_helper(points)
-    return obj['min_pair']
-    
-
-closest_pair([(0, 0), (1, 1), (5, 5), (1, 2), (0, 5), (5, 0), (3, 5)])
+    return obj['min_pair']    
