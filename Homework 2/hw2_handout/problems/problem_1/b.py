@@ -7,46 +7,54 @@ output: Maximum sum of non-adjacent tree nodes.
 TODO: implement your solution.
 """
 
+import sys
+
+sys.setrecursionlimit(1000000)
 
 def maxsum_tree(vertices, adjacency) -> int:
-    # need to find the root
-    node_childs = set()
+    # treat every edge as going both ways
+    neighbors = {}
+    for v in vertices:
+        neighbors[v] = []
 
-    for v in vertices.keys():
-        for child in adjacency.get(v, []):
-            node_childs.add(child)
+    for v in adjacency:
+        for child in adjacency[v]:
+            if v not in neighbors:
+                neighbors[v] = []
+            if child not in neighbors:
+                neighbors[child] = []
+            neighbors[v].append(child)
+            neighbors[child].append(v)
 
-    ver = set(vertices.keys())
-
-    roots = list(ver - node_childs)
-
-    memo = {}
-
+    visited = set()
     total = 0
-    for root in roots:
-        total += recursive_helper(vertices, adjacency, root, memo)
+
+    # the input could be a forest, so start a search from every unvisited node
+    for v in neighbors:
+        if v not in visited:
+            pick, notPick = recursive_helper(vertices, neighbors, v, visited)
+            total += max(pick, notPick)
 
     return total
 
-def recursive_helper(vertices, adjacency, v, memo):
-    if(memo.get(v) != None):
-        return memo[v]
 
-    children = adjacency.get(v, [])
+def recursive_helper(vertices, neighbors, v, visited):
+    visited.add(v)
 
-    # base case
-    if(len(children) == 0):
-        return max(vertices[v], 0)
-
-    pick = vertices[v]
-    for child in children:
-        for grandchild in adjacency.get(child, []):
-            pick += recursive_helper(vertices, adjacency, grandchild, memo)
-
+    pick = vertices.get(v, 0)
     notPick = 0
-    for child in children:
-        notPick += recursive_helper(vertices, adjacency, child, memo)
 
-    memo[v] = max(pick, notPick)
+    for n in neighbors[v]:
+        if n in visited:
+            continue
 
-    return memo[v]
+        childPick, childNotPick = recursive_helper(vertices, neighbors, n, visited)
+
+        # if v is picked, its children can't be
+        pick += childNotPick
+
+        # if v is not picked, each child can go either way
+        notPick += max(childPick, childNotPick)
+        
+    # returns (best sum if v is picked, best sum if v is not picked)
+    return pick, notPick
