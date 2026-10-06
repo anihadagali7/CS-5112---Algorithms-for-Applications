@@ -12,6 +12,10 @@ import sys
 sys.setrecursionlimit(1000000)
 
 def maxsum_tree(vertices, adjacency) -> int:
+    # normalize every id to a string before using it
+    vertices = {str(v): val for v, val in vertices.items()}
+    adjacency = {str(v): [str(c) for c in children] for v, children in adjacency.items()}
+
     # treat every edge as going both ways
     neighbors = {}
     for v in vertices:
