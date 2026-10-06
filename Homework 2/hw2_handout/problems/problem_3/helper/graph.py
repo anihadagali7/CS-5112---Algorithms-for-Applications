@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import random
+import statistics
 import sys
 import time
 from pathlib import Path
@@ -61,7 +62,7 @@ def measure(name: str, n: int, args) -> float:
             structure.insert(value)
         return count_pointers(structure, name)
 
-    total = 0.0
+    times = []
     for _ in range(args.trials):
         structure = new_structure(name, args)
         if args.operation == "search":
@@ -75,9 +76,9 @@ def measure(name: str, n: int, args) -> float:
         if args.operation in ("search", "both"):
             for value in queries:
                 structure.search(value)
-        total += time.perf_counter() - start
+        times.append(time.perf_counter() - start)
 
-    return total / args.trials
+    return statistics.median(times)
 
 
 def main() -> None:
@@ -106,6 +107,9 @@ def main() -> None:
     results = {
         name: [measure(name, n, args) for n in args.sizes] for name in structures
     }
+    for name, values in results.items():
+        for n, value in zip(args.sizes, values):
+            print(f"{LABELS[name]:12s} n={n:6d}  {value:.6g}")
 
     fig, ax = plt.subplots(figsize=(7, 5))
     for name, values in results.items():
@@ -113,14 +117,11 @@ def main() -> None:
 
     ax.set_xlabel("Number of elements (n)")
     if args.metric == "space":
-        ax.set_ylabel("Total nodes")
+        ax.set_ylabel("Total next-pointers (sum of node levels)")
         ax.set_title("Space Overhead vs. Input Size")
     else:
-        ax.set_ylabel("Time (seconds)")
+        ax.set_ylabel("Median time (seconds)")
         ax.set_title(f"{RUNTIME_TITLES[args.operation]} Runtime vs. Input Size")
-    if args.metric == "runtime":
-        ax.set_ylim(0, 0.015)
-        ax.set_yticks([0, 0.005, 0.01, 0.015])
     ax.legend(loc="upper left")
     ax.grid(True, linestyle="--", alpha=0.4)
     fig.tight_layout()
