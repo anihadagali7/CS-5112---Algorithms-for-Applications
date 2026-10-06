@@ -2,8 +2,6 @@
 Problem 3b-d
 
 Skip-list implementation.
-
-TODO: implement insertion and search.
 """
 
 from __future__ import annotations
@@ -25,110 +23,63 @@ class SkipList:
         self.sentinel = Node(None, self.max_level)
         self.root = None
 
+    def find_predecessors(self, x: int) -> list[Node]:
+        # predecessors[i] is the last node on level i whose value is less than x
+        predecessors = [self.sentinel] * self.max_level
+        current = self.sentinel
+
+        for level in range(self.max_level - 1, -1, -1):
+            # move right while the next node on this level is still smaller than x
+            while current.next[level] is not None and current.next[level].val < x:
+                current = current.next[level]
+            predecessors[level] = current
+
+        return predecessors
+
     def insert(self, x: int) -> None:
-        level_to_insert = self.random_level()
-        
-        # add at level 0
-        node = self.sentinel
-        
-        pointer = node
-        
-        if pointer is None:
-            newNode = Node(x, 0)
-            
-            pointer.next[0] = newNode
-            
-        while(pointer is not None):
-            if(pointer.val <= x and pointer.next[0] is not None and pointer.next[0].val >= x):
-                temp = pointer.next[0]
-                
-                newNode = Node(x, 0)
-                newNode.next[0] = temp
-                
-                pointer.next[0] = newNode
-                
-                return
-            elif (pointer.next[0] is None and x > pointer.val):
-                newNode = Node(x, 0)
-                pointer.next[0] = newNode
-                
-                newNode.next[0] = None
-                
-                return
-            
-            pointer = pointer.next[0]
-            
-        
-        # add node at random level
-        
-        for i in range(self.max_level, 1):
-            if(i == level_to_insert):
-                node = self.sentinel
-        
-                pointer = node
-                
-                if pointer is None:
-                    newNode = Node(x, level_to_insert)
-                    
-                    pointer.next[level_to_insert] = newNode
-                    
-                while(pointer is not None):
-                    if(pointer.val <= x and pointer.next[level_to_insert] is not None and pointer.next[level_to_insert].val >= x):
-                        temp = pointer.next[level_to_insert]
-                        
-                        newNode = Node(x, level_to_insert)
-                        newNode.next[level_to_insert] = temp
-                        
-                        pointer.next[level_to_insert] = newNode
-                        
-                        return
-                    elif (pointer.next[level_to_insert] is None and x > pointer.val):
-                        newNode = Node(x, level_to_insert)
-                        pointer.next[level_to_insert] = newNode
-                        
-                        newNode.next[level_to_insert] = None
-                        
-                        return
-                    
-                    pointer = pointer.next[level_to_insert]
-            
-        pass
+        predecessors = self.find_predecessors(x)
+
+        # x is already in the list
+        candidate = predecessors[0].next[0]
+        if candidate is not None and candidate.val == x:
+            return
+
+        height = self.random_level()
+        new_node = Node(x, height)
+
+        # splice the new node in on each level it appears on
+        for level in range(height):
+            new_node.next[level] = predecessors[level].next[level]
+            predecessors[level].next[level] = new_node
+
+        self.root = self.sentinel.next[0]
 
     def delete(self, x: int) -> None:
-        pass
+        predecessors = self.find_predecessors(x)
+
+        target = predecessors[0].next[0]
+        if target is None or target.val != x:
+            return
+
+        # unlink the node from each level it appears on
+        for level in range(target.level):
+            predecessors[level].next[level] = target.next[level]
+
+        self.root = self.sentinel.next[0]
 
     def search(self, x: int) -> Node | None:
-        
-#         When search for k:
-#           If k = key, done!
-#           If k < next key, go down a level
-#           If k ≥ next key, go right
-        node = self.sentinel.next[self.max_level]
-        
-        if node is None:
-            return
-        
-        pointer = node
-        
-        while pointer is not None:
-            if pointer.val == x:
-                return pointer
-            elif x < pointer.next[self.max_level].val:
-                pointer = pointer.next[self.max_level - 1]
-            else:
-                pointer = pointer.next[self.max_level]
-                
-        pass
-    
-    def random_level(self):
-        heads_counter = 1
-        
-        while heads_counter < self.max_level:
-            flip = random.random()
+        predecessors = self.find_predecessors(x)
 
-            if flip  < self.p:
-                heads_counter += 1
-            else:
-                return heads_counter
-            
-        return heads_counter
+        candidate = predecessors[0].next[0]
+        if candidate is not None and candidate.val == x:
+            return candidate
+        return None
+
+    def random_level(self) -> int:
+        height = 1
+
+        # keep flipping: heads (probability p) adds a level, tails stops
+        while height < self.max_level and random.random() < self.p:
+            height += 1
+
+        return height
