@@ -1,0 +1,64 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hw}
+
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[margin=1in]{geometry}
+\RequirePackage{iftex}
+
+\ifLuaTeX
+    \RequirePackage{emoji}
+    \setemojifont{Noto Color Emoji}
+\fi
+\RequirePackage[type1]{libertine}
+\ifLuaTeX
+    \newcommand{\scoretextemoji}{\emoji{memo}}
+    \newcommand{\scoreplotemoji}{\emoji{framed-picture}}
+    \newcommand{\scorecodeemoji}{\emoji{laptop}}
+\else
+    \newcommand{\scoretextemoji}{📝}
+    \newcommand{\scoreplotemoji}{🖼️}
+    \newcommand{\scorecodeemoji}{💻}
+\fi
+\RequirePackage{parskip}
+
+\RequirePackage{amsthm,amsmath,amssymb,hyperref}
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\usetikzlibrary{arrows,automata}
+
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.16}
+
+\RequirePackage{dirtree}
+\RequirePackage{nimbusmononarrow}
+\RequirePackage{environ}
+
+\RequirePackage{subcaption}
+
+\pagestyle{plain}
+\thispagestyle{empty}
+
+\definecolor{carnellian}{RGB}{190,20,20}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand{\io}{\textbf{Code input and output format.}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Problems:
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newcounter{subq}[problem]
+\newenvironment{subproblem}
+{\refstepcounter{subq} \begin{itemize} \item[(\alph{subq})]}
+{\end{itemize} \medskip}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Front matter helpers:
+
+\setlength\fboxrule{.5mm}\setlength{\fboxsep}{1.2mm}
+\newlength\courseheader
+\setlength\courseheader\textwidth
+\addtolength\courseheader{-4mm}
